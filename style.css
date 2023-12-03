@@ -46,3 +46,18 @@ body {
     color: #777;
   }
   
+  /* ... (existing code) */
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  

@@ -3,6 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
     loadDiscussions();
   });
   
+  // Set the admin identifier (you might use a more secure method in a real application)
+  const adminIdentifier = 'admin';
+  
+  // Function to check if a user is authenticated (dummy function for demonstration)
+  function isAuthenticated() {
+    // In a real application, you'd implement proper user authentication logic.
+    // For simplicity, we'll use a hardcoded value.
+    return localStorage.getItem('authenticatedUser') === 'true';
+  }
+  
   function addDiscussion() {
     const discussionInput = document.getElementById('discussionInput');
     const discussionsContainer = document.getElementById('discussions');
@@ -17,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         timestamp: formattedDate,
         comments: [],
         likes: 0,
+        user: localStorage.getItem('authenticatedUser') || 'guest',
       };
   
       // Save the discussion to local storage
@@ -40,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const commentObject = {
         content: commentInput,
         timestamp: formattedDate,
+        user: localStorage.getItem('authenticatedUser') || 'guest',
       };
   
       // Add the comment to the UI
@@ -83,8 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
       (d) => d.timestamp === discussionElement.querySelector('.timestamp').innerText
     );
     if (discussionIndex !== -1) {
-      discussions[discussionIndex] = { ...discussions[discussionIndex], ...updates };
-      localStorage.setItem('discussions', JSON.stringify(discussions));
+      // Check if the user is authenticated before updating
+      if (isAuthenticated()) {
+        discussions[discussionIndex] = { ...discussions[discussionIndex], ...updates };
+        localStorage.setItem('discussions', JSON.stringify(discussions));
+      } else {
+        alert('You need to be authenticated to perform this action.');
+      }
     }
   }
   
@@ -92,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function addDiscussionToUI(discussion, container) {
     const discussionElement = document.createElement('div');
     discussionElement.className = 'discussion';
-    discussionElement.innerHTML = `<p>${discussion.content}</p><p class="timestamp">Posted on ${discussion.timestamp}</p><button onclick="addComment(this)">Comment</button><button onclick="addLike(this)">Like</button>`;
+    discussionElement.innerHTML = `<p>${discussion.content}</p><p class="timestamp">Posted on ${discussion.timestamp} by ${discussion.user}</p><button onclick="addComment(this)">Comment</button><button onclick="addLike(this)">Like</button>`;
     container.appendChild(discussionElement);
   
     // Add comments to the UI
@@ -113,7 +130,15 @@ document.addEventListener('DOMContentLoaded', function () {
   function addCommentToUI(comment, container) {
     const commentElement = document.createElement('div');
     commentElement.className = 'comment';
-    commentElement.innerHTML = `<p>${comment.content}</p><p class="timestamp">Commented on ${comment.timestamp}</p>`;
+    commentElement.innerHTML = `<p>${comment.content}</p><p class="timestamp">Commented on ${comment.timestamp} by ${comment.user}</p>`;
     container.insertBefore(commentElement, container.lastChild);
+  }
+  
+  // Function to simulate user authentication (dummy function for demonstration)
+  function authenticateUser() {
+    // In a real application, you'd implement proper user authentication logic.
+    // For simplicity, we'll use a hardcoded value.
+    localStorage.setItem('authenticatedUser', 'true');
+    alert('User authenticated!');
   }
   
