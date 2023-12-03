@@ -9,8 +9,9 @@ document.addEventListener('DOMContentLoaded', function () {
   // Function to check if a user is authenticated (dummy function for demonstration)
   function isAuthenticated() {
     // In a real application, you'd implement proper user authentication logic.
-    // For simplicity, we'll use a hardcoded value.
-    return localStorage.getItem('authenticatedUser') === 'admin';
+    // For simplicity, we'll use a hardcoded passcode.
+    const authenticatedUser = localStorage.getItem('authenticatedUser');
+    return authenticatedUser === 'admin' || authenticatedUser === '2268'; // Admin or passcode '2268'
   }
   
   function addDiscussion() {
@@ -137,11 +138,16 @@ document.addEventListener('DOMContentLoaded', function () {
     container.insertBefore(commentElement, container.lastChild);
   }
   
-  // Function to simulate user authentication (dummy function for demonstration)
-  function authenticateUser() {
+  // Function to authenticate as admin (requires passcode)
+  function authenticateAdmin() {
     // In a real application, you'd implement proper user authentication logic.
-    // For simplicity, we'll use a hardcoded value.
-    localStorage.setItem('authenticatedUser', 'admin');
-    alert('User authenticated!');
+    // For simplicity, we'll use a passcode.
+    const passcode = prompt('Enter passcode to authenticate as admin:');
+    if (passcode === '2268') {
+      localStorage.setItem('authenticatedUser', 'admin');
+      alert('Admin authenticated!');
+    } else {
+      alert('Authentication failed. Incorrect passcode.');
+    }
   }
   
