@@ -42,6 +42,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   
+  function addComment(button) {
+    const commentInput = prompt('Add a comment:');
+    if (commentInput !== null && commentInput.trim() !== '') {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toLocaleString();
+  
+      // Create a comment object
+      const commentObject = {
+        content: commentInput,
+        timestamp: formattedDate,
+        user: localStorage.getItem('authenticatedUser') || 'guest',
+      };
+  
+      // Add the comment to the UI
+      addCommentToUI(commentObject, button.parentNode);
+  
+      // Update the discussion in local storage
+      updateDiscussion(button.parentNode, { comments: [commentObject] });
+    }
+  }
+  
+  function addLike(button) {
+    const likesContainer = document.createElement('div');
+    likesContainer.className = 'likes-container';
+    likesContainer.innerHTML = '<p>1 like</p>';
+    button.parentNode.insertBefore(likesContainer, button);
+  
+    // Update the discussion in local storage
+    updateDiscussion(button.parentNode, { likes: 1 });
+  }
+  
   function deleteDiscussion(button) {
     // Check if the user is authenticated before deleting
     if (isAuthenticated()) {
